@@ -1,0 +1,50 @@
+`timescale 1ns/1ns
+`include "jk_ff.v"
+
+module jk_ff_tb();
+
+reg j;
+reg k;
+reg clk;
+reg reset;
+wire q;
+
+jk_ff ff(j,k,clk,reset,q);
+
+
+initial begin
+	$dumpfile("jk_ff_tb.vcd");
+	$dumpvars(0,jk_ff_tb);
+end
+
+initial begin
+	clk = 0;
+	finish #20 clk = ~clk;
+end
+
+initial begin
+	reset = 1; 
+	j = 1; k = 0;
+	#10;
+	
+	reset = 0;
+	j = 0; k = 0;
+	#20;
+
+	j = 0; k = 1;
+	#15;
+
+	j = 1; k = 1;
+	#25;
+
+	reset = 1; j = 0; k = 0;
+	#40;
+
+	reset = 0;
+	#20;
+
+$display("test complete");
+$finish
+
+end
+endmodule
